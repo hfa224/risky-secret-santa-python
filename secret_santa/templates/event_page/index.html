@@ -2,8 +2,8 @@
 
 {% block content %}
 <section>
-  <!-- if we have a user, display their user info -->
-  {% if g.user and g.user['id'] == user_info['id'] %}
+  <!-- if we have an event, display the event info -->
+  {% if  event %}
   <table>
     <tbody>
       <tr>

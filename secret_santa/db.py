@@ -19,17 +19,14 @@ def init_db_command():
     click.echo("Initialized the database.")
 
 
-@click.command("add-admin")
-def add_admin_command():
-    """
-    Creates the cli 'add-admin' command
-    Add admin user to the database.
-    """
-
-    # Add admin user to the database.
-    add_admin()
-    click.echo("Added the admin user.")
-
+@click.command("add-event")
+@click.option('--draw_date', prompt='Enter draw date dd-mm-yyyy')
+@click.option('--event_date', prompt='Enter event date dd-mm-yyyy')
+@click.option('--event_description', prompt='Event description')
+@click.option('--cost', prompt='Maximum spend')
+def hello(draw_date, event_date, event_description, cost):
+    """Command line method to add an event to the database"""
+    add_event(draw_date, event_date, event_description, cost)
 
 def init_app(app):
     """
@@ -61,21 +58,18 @@ def init_db():
         db.executescript(f.read().decode("utf8"))
 
 
-def add_admin():
+def add_event(draw_date, event_date, event_description, cost):
     """
     Initialises the db using the schema file. Will
     clear the existing data and create new tables.
     """
     db = get_db()
 
-    password = "password"  # obviously a bad idea, for testing
-
     db.execute(
-        "INSERT INTO user (username, password, email, isAdmin) VALUES (?, ?, ?, ?)",
-        ("admin", generate_password_hash(password), "helenffionadams@gmail.com", True),
+        "INSERT INTO events (draw_date, event_date, event_description, cost) VALUES (?, ?, ?, ?)",
+        (draw_date, event_date, event_description, cost),
     )
     db.commit()
-
 
 def get_db():
     """
