@@ -13,7 +13,7 @@ from secret_santa.auth import login_required
 from secret_santa.db import get_db
 
 # no url prefix parameter, so this is the default page
-bp = Blueprint("user_page", __name__, url_prefix="/event")
+bp = Blueprint("event_page", __name__, url_prefix="/event")
 
 
 @bp.route("/")
@@ -22,7 +22,7 @@ def index():
     This is the view that displays the event info
     """
     event = get_current_event()
-    return render_template("user_page/index.html", event=event)
+    return render_template("event_page/index.html", event=event)
 
 
 @bp.route("/<int:event_id>/update", methods=("GET", "POST"))
@@ -74,7 +74,7 @@ def get_current_event():
     Get the current event info, or return None
     """
     res = get_db().execute(
-        "SELECT e.event_id, event_date, draw_date, event_description, "
+        "SELECT event_id, event_date, draw_date, event_description, "
         "cost FROM event ORDER BY event_date DESC"
     )
     event = res.fetchone()
@@ -88,8 +88,8 @@ def get_event(event_id):
     """
 
     res = get_db().execute(
-        "SELECT e.event_id, event_date, draw_date, event_description, cost FROM event e"
-        "WHERE e.event_id = ?",
+        "SELECT event_id, event_date, draw_date, event_description, cost FROM event "
+        "WHERE event_id = ?",
         (event_id,),
     )
     event = res.fetchone()

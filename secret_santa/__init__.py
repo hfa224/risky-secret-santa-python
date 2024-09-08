@@ -6,6 +6,7 @@ from . import auth
 from . import user_page
 from . import admin_page
 from . import home_page
+from . import event_page
 
 
 def create_app(test_config=None):
@@ -54,6 +55,7 @@ def create_app(test_config=None):
     app.register_blueprint(user_page.bp)
     app.register_blueprint(admin_page.bp)
     app.register_blueprint(home_page.bp)
+    app.register_blueprint(event_page.bp)
 
     # the home_page blueprint does not have a url prefix,
     # so it's the main view
