@@ -45,9 +45,6 @@ def update(user_id):
         dietary_info = request.form["dietary_info"]
         error = None
 
-        # if not title:
-        #    error = 'Title is required.'
-
         if error is not None:
             flash(error)
         else:

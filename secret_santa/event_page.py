@@ -3,15 +3,11 @@
 from flask import (
     Blueprint,
     flash,
-    g,
     redirect,
     render_template,
     request,
-    url_for,
-    current_app,
+    url_for
 )
-from werkzeug.exceptions import abort
-from flask_mail import Mail, Message
 
 from secret_santa.auth import login_required
 from secret_santa.db import get_db
@@ -44,15 +40,13 @@ def update(event_id):
         cost = request.form["cost"]
         error = None
 
-        # if not title:
-        #    error = 'Title is required.'
-
         if error is not None:
             flash(error)
         else:
             db = get_db()
             db.execute(
-                "UPDATE event SET event_date = ?, draw_date = ?, event_description = ?, cost = ?",
+                "UPDATE event SET event_date = ?, draw_date = ?, ",
+                "event_description = ?, cost = ?",
                 " WHERE event_id = ?",
                 (event_date, draw_date, event_description, cost, event_id),
             )
@@ -80,7 +74,8 @@ def get_current_event():
     Get the current event info, or return None
     """
     res = get_db().execute(
-        "SELECT e.event_id, event_date, draw_date, event_description, cost FROM event ORDER BY event_date DESC"
+        "SELECT e.event_id, event_date, draw_date, event_description, "
+        "cost FROM event ORDER BY event_date DESC"
     )
     event = res.fetchone()
 

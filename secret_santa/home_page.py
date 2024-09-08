@@ -2,18 +2,10 @@
 
 from flask import (
     Blueprint,
-    flash,
     g,
-    redirect,
-    render_template,
-    request,
-    url_for,
-    current_app,
+    render_template
 )
-from werkzeug.exceptions import abort
 
-from secret_santa.auth import login_required
-from secret_santa.db import get_db
 from secret_santa.user_page import get_user
 
 # no url prefix parameter, so this is the default page
