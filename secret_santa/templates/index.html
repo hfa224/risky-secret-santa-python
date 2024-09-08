@@ -2,7 +2,11 @@
 
 {% block content %}
 <section>
-  <!-- put link to user info here -->
-  <!-- put link to event info here -->
+  {% if g.user and user_info %}
+    <!-- put link to user and event info here -->
+    <p><a href="{{ url_for('user_page.index', user_id=user_info['id']) }}">User info page</a></p>
+  {% else %}
+    <p>Please sign up or log in above :)</p>
+  {% endif %}
 </section>
 {% endblock %}

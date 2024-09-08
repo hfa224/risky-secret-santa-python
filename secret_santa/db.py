@@ -4,7 +4,6 @@ Contains db functionality
 import sqlite3
 import click
 from flask import current_app, g
-from werkzeug.security import generate_password_hash
 
 
 @click.command("init-db")
@@ -24,7 +23,7 @@ def init_db_command():
 @click.option('--event_date', prompt='Enter event date dd-mm-yyyy')
 @click.option('--event_description', prompt='Event description')
 @click.option('--cost', prompt='Maximum spend')
-def hello(draw_date, event_date, event_description, cost):
+def add_event_command(draw_date, event_date, event_description, cost):
     """Command line method to add an event to the database"""
     add_event(draw_date, event_date, event_description, cost)
 
@@ -43,7 +42,7 @@ def init_app(app):
     # Add the defined cli command to the flask app
     app.cli.add_command(init_db_command)
 
-    app.cli.add_command(add_admin_command)
+    app.cli.add_command(add_event_command)
 
 
 def init_db():
@@ -66,7 +65,7 @@ def add_event(draw_date, event_date, event_description, cost):
     db = get_db()
 
     db.execute(
-        "INSERT INTO events (draw_date, event_date, event_description, cost) VALUES (?, ?, ?, ?)",
+        "INSERT INTO event (draw_date, event_date, event_description, cost) VALUES (?, ?, ?, ?)",
         (draw_date, event_date, event_description, cost),
     )
     db.commit()

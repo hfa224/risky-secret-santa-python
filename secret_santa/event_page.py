@@ -25,21 +25,23 @@ def index():
     """
     This is the view that displays the event info
     """
-    event=get_current_event()
+    event = get_current_event()
     return render_template("user_page/index.html", event=event)
 
 
-@bp.route("/<int:user_id>/update", methods=("GET", "POST"))
+@bp.route("/<int:event_id>/update", methods=("GET", "POST"))
 @login_required
-def update(user_id):
+def update(event_id):
     """
     This is the view where the user can update their user info
     """
-    user = get_user(user_id)
+    event = get_event(event_id)
 
     if request.method == "POST":
-        address = request.form["address"]
-        dietary_info = request.form["dietary_info"]
+        event_date = request.form["event_date"]
+        draw_date = request.form["draw_date"]
+        event_description = request.form["event_description"]
+        cost = request.form["cost"]
         error = None
 
         # if not title:
@@ -50,40 +52,51 @@ def update(user_id):
         else:
             db = get_db()
             db.execute(
-                "UPDATE user SET address = ?, dietary_info = ? WHERE id = ?",
-                (address, dietary_info, user_id),
+                "UPDATE event SET event_date = ?, draw_date = ?, event_description = ?, cost = ?",
+                " WHERE event_id = ?",
+                (event_date, draw_date, event_description, cost, event_id),
             )
             db.commit()
-            return redirect(url_for("user_page.index"))
+            return redirect(url_for("event_page.index"))
 
-    return render_template("user_page/update.html", user=user)
+    return render_template("event_page/update.html", event=event)
 
 
-@bp.route("/<int:user_id>/delete", methods=("POST",))
+@bp.route("/<int:event_id>/delete", methods=("POST",))
 @login_required
-def delete(user_id):
+def delete(event_id):
     """
     Deletes the user
     """
-    get_user(user_id)
+    get_event(event_id)
     db = get_db()
-    db.execute("DELETE FROM user WHERE id = ?", (id,))
+    db.execute("DELETE FROM user WHERE event_id = ?", (event_id,))
     db.commit()
-    return redirect(url_for("auth.logout"))
+    return redirect(url_for("event"))
+
 
 def get_current_event():
     """
     Get the current event info, or return None
     """
-    user = (
-        get_db()
-        .execute(
-            "SELECT u.id, username, email, address, dietary_info"
-            " FROM user u"
-            " WHERE u.id = ?",
-            (user_id,),
-        )
-        .fetchone()
+    res = get_db().execute(
+        "SELECT e.event_id, event_date, draw_date, event_description, cost FROM event ORDER BY event_date DESC"
     )
+    event = res.fetchone()
 
-    return user
+    return event
+
+
+def get_event(event_id):
+    """
+    Get the current event info, or return None
+    """
+
+    res = get_db().execute(
+        "SELECT e.event_id, event_date, draw_date, event_description, cost FROM event e"
+        "WHERE e.event_id = ?",
+        (event_id,),
+    )
+    event = res.fetchone()
+
+    return event

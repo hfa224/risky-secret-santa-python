@@ -1,16 +1,17 @@
 DROP TABLE IF EXISTS user;
-DROP TABLE IF EXISTS event_info;
+DROP TABLE IF EXISTS event;
+DROP TABLE IF EXISTS event_attendence;
 
 CREATE TABLE user (
   user_id INTEGER PRIMARY KEY AUTOINCREMENT,
   username TEXT UNIQUE NOT NULL,
-  email TEXT UNIQUE NOT NULL,s
+  email TEXT UNIQUE NOT NULL,
   address TEXT,
   dietary_info TEXT DEFAULT "None",
   password TEXT NOT NULL
 );
 
-CREATE TABLE event_info (
+CREATE TABLE event (
   event_id INTEGER PRIMARY KEY AUTOINCREMENT,
   draw_date TIMESTAMP NOT NULL,
   event_date TIMESTAMP NOT NULL,
