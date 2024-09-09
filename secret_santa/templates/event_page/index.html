@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<section>
+  <!-- if we have an event, display the event info -->
+  {% if event %}
+  <table>
+    <tbody>
+      <tr>
+        <td>Event draw date</td>
+        <td>{{ event['draw_date'] }}</td>
+      </tr>
+      <tr>
+        <td>Event exchange date</td>
+        <td>{{event['event_date']}}</td>
+      </tr>
+      <tr>
+        <td>event_description</td>
+        <td>{{event['event_description']}}</td>
+      </tr>
+      <tr>
+        <td>cost</td>
+        <td>{{event['cost'] }}</td>
+      </tr>
+    </tbody>
+  </table>
+</section>
+{% endif %}
+{% endblock %}

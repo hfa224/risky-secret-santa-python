@@ -19,7 +19,7 @@ def index():
 
     if g.user and is_admin == 1:
         # get existing events created by the user
-        admin_info = get_user(g.user["id"])
+        admin_info = get_user(g.user["user_id"])
         #event_list = get_events(g.user["id"])
     else:
         admin_info = None
@@ -30,7 +30,7 @@ def get_events():
     """
     Get event information given the user id
     """
-    event_info = get_db().execute("SELECT *", " FROM event_info;").fetchall()
+    event_info = get_db().execute("SELECT *", " FROM event;").fetchall()
 
     # if user is None:
     #    abort(404, f"User id {id} doesn't exist.")
@@ -42,7 +42,7 @@ def add_event():
     """
     Add an event
     """
-    event_info = get_db().execute("SELECT *", " FROM event_info;").fetchall()
+    event_info = get_db().execute("SELECT *", " FROM event;").fetchall()
 
     # if user is None:
     #    abort(404, f"User id {id} doesn't exist.")

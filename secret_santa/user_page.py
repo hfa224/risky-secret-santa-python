@@ -16,17 +16,18 @@ from flask_mail import Mail, Message
 from secret_santa.auth import login_required
 from secret_santa.db import get_db
 
-# no url prefix parameter, so this is the default page
-bp = Blueprint("user_page", __name__)
+
+bp = Blueprint("user_page", __name__, url_prefix="/user")
 
 
 @bp.route("/")
+@login_required
 def index():
     """
-    This is the view that displays a user their info
+    This is the view that displays the logged in user their info
     """
     if g.user:
-        user_info = get_user(g.user["id"])
+        user_info = get_user(g.user["user_id"])
     else:
         user_info = None
     return render_template("user_page/index.html", user_info=user_info)
@@ -45,15 +46,12 @@ def update(user_id):
         dietary_info = request.form["dietary_info"]
         error = None
 
-        # if not title:
-        #    error = 'Title is required.'
-
         if error is not None:
             flash(error)
         else:
             db = get_db()
             db.execute(
-                "UPDATE user SET address = ?, dietary_info = ? WHERE id = ?",
+                "UPDATE user SET address = ?, dietary_info = ? WHERE user_id = ?",
                 (address, dietary_info, user_id),
             )
             db.commit()
@@ -66,11 +64,11 @@ def update(user_id):
 @login_required
 def delete(user_id):
     """
-    Deletes the user
+    Deletes the user and logs them out
     """
     get_user(user_id)
     db = get_db()
-    db.execute("DELETE FROM user WHERE id = ?", (id,))
+    db.execute("DELETE FROM user WHERE user_id = ?", (user_id,))
     db.commit()
     return redirect(url_for("auth.logout"))
 
@@ -121,9 +119,9 @@ def get_user(user_id):
     user = (
         get_db()
         .execute(
-            "SELECT u.id, username, email, address, dietary_info"
+            "SELECT u.user_id, username, email, address, dietary_info"
             " FROM user u"
-            " WHERE u.id = ?",
+            " WHERE u.user_id = ?",
             (user_id,),
         )
         .fetchone()

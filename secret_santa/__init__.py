@@ -5,6 +5,8 @@ from . import db
 from . import auth
 from . import user_page
 from . import admin_page
+from . import home_page
+from . import event_page
 
 
 def create_app(test_config=None):
@@ -29,9 +31,8 @@ def create_app(test_config=None):
 
     if test_config is None:
         # load the instance config, if it exists, when not testing
-        print("loading from pyfile")
+        print("loading config from pyfile")
         app.config.from_pyfile("config.py", silent=False)
-        print(app.config)
     else:
         # load the test config if passed in
         app.config.from_mapping(test_config)
@@ -53,8 +54,10 @@ def create_app(test_config=None):
 
     app.register_blueprint(user_page.bp)
     app.register_blueprint(admin_page.bp)
+    app.register_blueprint(home_page.bp)
+    app.register_blueprint(event_page.bp)
 
-    # the user_page blueprint does not have a url prefix,
+    # the home_page blueprint does not have a url prefix,
     # so it's the main view
     app.add_url_rule("/", endpoint="index")
 
