@@ -51,7 +51,6 @@ def create_app(test_config=None):
     db.init_app(app)
 
     app.register_blueprint(auth.bp)
-
     app.register_blueprint(user_page.bp)
     app.register_blueprint(admin_page.bp)
     app.register_blueprint(home_page.bp)
