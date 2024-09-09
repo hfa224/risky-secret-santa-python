@@ -1,3 +1,4 @@
+# pylint: disable=duplicate-code
 """This page serves up the user page endpoints"""
 
 from flask import (
