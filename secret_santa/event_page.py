@@ -1,5 +1,5 @@
 # pylint: disable=duplicate-code
-"""This page serves up the user page endpoints"""
+"""This page serves up the event page endpoints"""
 
 from flask import (
     Blueprint,
@@ -13,14 +13,13 @@ from flask import (
 from secret_santa.auth import login_required
 from secret_santa.db import get_db
 
-# no url prefix parameter, so this is the default page
 bp = Blueprint("event_page", __name__, url_prefix="/event")
 
-
 @bp.route("/")
+@login_required
 def index():
     """
-    This is the view that displays the event info
+    This is the view that displays the current event info
     """
     event = get_current_event()
     return render_template("event_page/index.html", event=event)
@@ -30,7 +29,7 @@ def index():
 @login_required
 def update(event_id):
     """
-    This is the view where the user can update their user info
+    This is the view where the event can be updated
     """
     event = get_event(event_id)
 
@@ -61,11 +60,11 @@ def update(event_id):
 @login_required
 def delete(event_id):
     """
-    Deletes the user
+    Deletes the event
     """
     get_event(event_id)
     db = get_db()
-    db.execute("DELETE FROM user WHERE event_id = ?", (event_id,))
+    db.execute("DELETE FROM event WHERE event_id = ?", (event_id,))
     db.commit()
     return redirect(url_for("event"))
 
@@ -85,7 +84,7 @@ def get_current_event():
 
 def get_event(event_id):
     """
-    Get the current event info, or return None
+    Get the event with the given id, or return none
     """
 
     res = get_db().execute(

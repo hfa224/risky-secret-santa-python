@@ -16,14 +16,15 @@ from flask_mail import Mail, Message
 from secret_santa.auth import login_required
 from secret_santa.db import get_db
 
-# no url prefix parameter, so this is the default page
+
 bp = Blueprint("user_page", __name__, url_prefix="/user")
 
 
 @bp.route("/")
+@login_required
 def index():
     """
-    This is the view that displays a user their info
+    This is the view that displays the logged in user their info
     """
     if g.user:
         user_info = get_user(g.user["user_id"])
@@ -63,7 +64,7 @@ def update(user_id):
 @login_required
 def delete(user_id):
     """
-    Deletes the user
+    Deletes the user and logs them out
     """
     get_user(user_id)
     db = get_db()
