@@ -13,8 +13,8 @@ CREATE TABLE user (
 
 CREATE TABLE event (
   event_id INTEGER PRIMARY KEY AUTOINCREMENT,
-  draw_date TIMESTAMP NOT NULL,
-  event_date TIMESTAMP NOT NULL,
+  draw_date DATE NOT NULL,
+  event_date DATE NOT NULL,
   event_description MEDIUMTEXT NOT NULL,
   cost TEXT NOT NULL
 );
