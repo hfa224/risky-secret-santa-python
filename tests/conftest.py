@@ -5,18 +5,21 @@ import pytest
 from secret_santa import create_app
 from secret_santa.db import get_db, init_db
 
-with open(os.path.join(os.path.dirname(__file__), 'data.sql'), 'rb') as f:
-    _data_sql = f.read().decode('utf8')
+with open(os.path.join(os.path.dirname(__file__), "data.sql"), "rb") as f:
+    _data_sql = f.read().decode("utf8")
 
 
-@pytest.fixture
-def app():
+@pytest.fixture(name="app")
+def fixture_app():
+    """provide test app"""
     db_fd, db_path = tempfile.mkstemp()
 
-    app = create_app({
-        'TESTING': True,
-        'DATABASE': db_path,
-    })
+    app = create_app(
+        {
+            "TESTING": True,
+            "DATABASE": db_path,
+        }
+    )
 
     with app.app_context():
         init_db()
@@ -28,29 +31,36 @@ def app():
     os.unlink(db_path)
 
 
-@pytest.fixture
-def client(app):
+@pytest.fixture(name="client")
+def fixture_client(app):
+    """Provide test client"""
     return app.test_client()
 
 
-@pytest.fixture
-def runner(app):
+@pytest.fixture(name="runner")
+def fixture_runner(app):
+    """Provide test runner"""
     return app.test_cli_runner()
 
+
 class AuthActions(object):
+    """Class mocking auth actions"""
+
     def __init__(self, client):
         self._client = client
 
-    def login(self, username='test', password='test'):
+    def login(self, username="test", password="test"):
+        """ call fixture client login endpoint"""
         return self._client.post(
-            '/auth/login',
-            data={'username': username, 'password': password}
+            "/auth/login", data={"username": username, "password": password}
         )
 
     def logout(self):
-        return self._client.get('/auth/logout')
+        """ call fixture client logout endpoint"""
+        return self._client.get("/auth/logout")
 
 
 @pytest.fixture
 def auth(client):
+    """provide auth endpoint"""
     return AuthActions(client)
