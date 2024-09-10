@@ -2,6 +2,7 @@
 
 import sqlite3
 
+from dataclasses import dataclass
 import pytest
 from secret_santa.db import get_db
 
@@ -21,6 +22,7 @@ def test_get_close_db(app):
 def test_init_db_command(runner, monkeypatch):
     """Test init_db command"""
 
+    @dataclass
     class Recorder:
         """Recorder class"""
 
