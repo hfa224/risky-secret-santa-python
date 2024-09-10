@@ -13,6 +13,7 @@ CREATE TABLE user (
 
 CREATE TABLE event (
   event_id INTEGER PRIMARY KEY AUTOINCREMENT,
+  event_title TEXT NOT NULL,
   draw_date DATE NOT NULL,
   event_date DATE NOT NULL,
   event_description MEDIUMTEXT NOT NULL,
