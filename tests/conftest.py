@@ -1,3 +1,5 @@
+""" configure test fixtures """
+
 import os
 import tempfile
 
@@ -43,20 +45,20 @@ def fixture_runner(app):
     return app.test_cli_runner()
 
 
-class AuthActions(object):
+class AuthActions:
     """Class mocking auth actions"""
 
     def __init__(self, client):
         self._client = client
 
     def login(self, username="test", password="test"):
-        """ call fixture client login endpoint"""
+        """call fixture client login endpoint"""
         return self._client.post(
             "/auth/login", data={"username": username, "password": password}
         )
 
     def logout(self):
-        """ call fixture client logout endpoint"""
+        """call fixture client logout endpoint"""
         return self._client.get("/auth/logout")
 
 
