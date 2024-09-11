@@ -3,42 +3,80 @@
 <head>
   <title>{% block title %}{% endblock %} - Flaskr</title>
   <!--link rel='stylesheet' href='https://cdn.jsdelivr.net/gh/kognise/water.css@latest/dist/dark.css'-->
-  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='beige.css') }}">
 </head>
 
 <body>
   <main>
-  <nav>
-    <h4><a href="{{ url_for('index') }}">Secret Santa</a></h4>
+    <section name="header">
+      <h1 style="text-align:center;">🎅🎄Welcome to Risky Secret Santa ❄️🎁</h1>
+    </section>
     <hr>
+    <section>
+      <div class="nav-grid">
       {% if g.user %}
-      Welcome {{ g.user['username'] }} !
-      <a href="{{ url_for('auth.logout') }}">Log Out</a>
+      <div style="grid-column-start: 1;grid-column-end: 2;">
+        Welcome <strong>{{ g.user['username'] }}</strong>!
+      </div>
+      <div style="grid-column-start: 2;grid-column-end: 2;justify-self: end;">
+        <form action="{{ url_for('auth.logout') }}" method="get">
+          <input class="info" type="submit" value="Log out">
+        </form>
+      </div>
       {% else %}
-        <div style="width:50%; float: left;">
+        <div style="grid-column-start: 1;grid-column-end: 2;">
           <form action="{{ url_for('auth.register') }}" method="get">
             <input class="info" type="submit" value="Register">
           </form>
-          </div>
-          <div style="width:50%; float:right;">
+        </div>
+        <div style="grid-column-start: 2;grid-column-end: 2;">
           <form action="{{ url_for('auth.login') }}" method="get">
             <input class="info" type="submit" value="Log in">
           </form>
-          </div>
-        {% endif %}
-  </nav>
-  <hr>
-  <section class="content">
-    <h4>
-      {% block header %}{% endblock %}
-    </h4>
-    {% for message in get_flashed_messages() %}
-    <div class="flash">{{ message }}</div>
-    {% endfor %}
-    {% block content %}{% endblock %}
-  </section>
-  <section>
+        </div>
+      {% endif %}
+      </div>
+    </section>
     <hr>
-  </section>
+    <section class="content">
+      <h4>
+        {% block header %}{% endblock %}
+      </h4>
+      {% for message in get_flashed_messages() %}
+      <div class="flash">{{ message }}</div>
+      {% endfor %}
+      {% block content %}{% endblock %}
+    </section>
+
+    </hr>
+    <!--section class="content">
+      <table>
+        <thead>
+          <tr>
+            <th>
+              Your User information
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+        <tr>
+          <td>user name:</td>
+          <td contenteditable='true'>helen</td>
+        </tr>
+        <tr>
+          <td>email:</td>
+          <td>helenffionadams@gmail.com</td>
+        </tr>
+        <tr>
+          <td>Address:</td>
+          <td>N/A</td>
+        </tr>
+        <tr>
+          <td>Dietary requirements:</td>
+          <td>Veggie please! 🥬</td>
+        </tr>
+        </tbody>
+      </table>
+      </section -->
   </main>
 </body>
