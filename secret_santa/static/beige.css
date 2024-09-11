@@ -28,7 +28,9 @@ body {
   'FILL' 0,
   'wght' 400,
   'GRAD' 0,
-  'opsz' 24
+  'opsz' 24;
+  float: inline-start;
+  margin-right:10px;
 }
 
 
@@ -41,7 +43,7 @@ body {
     --form-bg: #dfc09f;
     --form-fg: #070707;
     --form-fg-placeholder: #a9a9a9;
-    --link-highlight: #41adff;
+    --link-highlight: #8C001A;
     --code-fg: #ffbe85;
     --scroll-hover: #415c73;
     --scroll-fg: #324759;
@@ -62,7 +64,7 @@ body {
 .base-grid {
   display: grid;
   grid-template-columns: 24% 24% 24% 24%;
-  grid-template-rows: 75px 50px 100px;
+  grid-template-rows: 50px 50px 100px;
   grid-gap: 10px;
   width:100%;
   align-items: stretch;
@@ -104,7 +106,7 @@ textarea {
 h1 {
   font-size: 2.2em;
   margin-top: 0;
-  font-family: "Shrikhand";
+  font-family: "Yuji Mai";
 }
 
 h1,

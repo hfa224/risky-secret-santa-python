@@ -15,6 +15,7 @@ from flask_mail import Mail, Message
 
 from secret_santa.auth import login_required
 from secret_santa.db import get_db
+from secret_santa.emails import send_email
 
 
 bp = Blueprint("user_page", __name__, url_prefix="/user")
@@ -91,7 +92,7 @@ def send_info(user_id):
     recipient = email
     msg = Message("Twilio SendGrid Test Email", recipients=[recipient])
     msg.body = (
-        "Hello"
+        "Hello "
         + name
         + ", your address is "
         + address
@@ -104,10 +105,10 @@ def send_info(user_id):
     #    "<p>Congratulations! You have sent a test email with "
     #    "<b>Twilio SendGrid</b>!</p>"
     # )
-    mail.send(msg)
+    #mail.send(msg)
     flash(f"A test message was sent to {recipient}.")
 
-    # send_email(mail, email)
+    send_email(mail, email, msg)
 
     return render_template("user_page/index.html", user_info=user)
 

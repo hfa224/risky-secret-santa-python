@@ -3,7 +3,7 @@
 from flask import flash
 from flask_mail import Message
 
-def send_email(flask_mail, recipient_email):
+def send_email(flask_mail, recipient_email, msg):
     """
     Method that sends an email using flask_mail to recipient email
     """

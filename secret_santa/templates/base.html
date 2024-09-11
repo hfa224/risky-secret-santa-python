@@ -1,7 +1,10 @@
 <!doctype html>
-
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Shrikhand&family=Yuji+Mai&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
 <head>
-  <title>{% block title %}{% endblock %} - Flaskr</title>
+  <title>{% block title %}{% endblock %}</title>
   <!--link rel='stylesheet' href='https://cdn.jsdelivr.net/gh/kognise/water.css@latest/dist/dark.css'-->
   <link rel="stylesheet" href="{{ url_for('static', filename='beige.css') }}">
 </head>
@@ -9,14 +12,14 @@
 <body>
   <main>
     <section name="header">
-      <h1 style="text-align:center;">🎅🎄Welcome to Risky Secret Santa ❄️🎁</h1>
+      <h1 style="text-align:center;"><a href="{{ url_for('index') }}">🎅🎄Welcome to Risky Secret Santa ❄️🎁</a></h1>
     </section>
     <hr>
     <section>
       <div class="nav-grid">
       {% if g.user %}
       <div style="grid-column-start: 1;grid-column-end: 2;">
-        Welcome <strong>{{ g.user['username'] }}</strong>!
+        Welcome <a href="{{ url_for('user_page.index', user_id=g.user['user_id']) }}">{{ g.user['username'] }}</a>!
       </div>
       <div style="grid-column-start: 2;grid-column-end: 2;justify-self: end;">
         <form action="{{ url_for('auth.logout') }}" method="get">
