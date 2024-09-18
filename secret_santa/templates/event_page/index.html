@@ -17,6 +17,7 @@
     <div class="row-style second-row-element-2" style="padding:10px"><span class="material-symbols-outlined">
         savings
       </span> Maximum spend: {{ event['cost']}}</div>
+    <!-- Here, we need to check - if user has joined, and the draw has happened-->
     <div class="row-style third-row-element" style="padding:10px">
       <details>
         <summary>Click here to see your assigned santee</summary>
@@ -28,7 +29,18 @@
 </section>
 <hr>
 <section>
-  <p>I need <a href="">help!</a> | I'd like to <a href="">leave</a> the draw...
+  <!-- Here, we need to check - if user has joined, display leave button, if not, display join button-->
+  {% if event_attendance %}
+  <form action="{{ url_for('event_page.leave', event_id=event['event_id']) }}" method="post">
+    <input class="info" type="submit" value="Leave"
+      onclick="return confirm('Click to leave the event.');">
+  </form>
+  {% else %}
+  <form action="{{ url_for('event_page.join', event_id=event['event_id']) }}" method="post">
+    <input class="info" type="submit" value="Join"
+      onclick="return confirm('Click to join the event.');">
+  </form>
+  {% endif %}
 </section>
 {% endif %}
 {% endblock %}

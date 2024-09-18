@@ -20,8 +20,8 @@ CREATE TABLE event (
   cost TEXT NOT NULL
 );
 
-CREATE TABLE event_attendence (
-  user_id INTEGER REFERENCES user(user_id),
-  event_id INTEGER REFERENCES event_info(event_id),
-  joined BOOLEAN DEAFULT FALSE
+CREATE TABLE event_attendance (
+  user_id INTEGER REFERENCES user(user_id) NOT NULL,
+  event_id INTEGER REFERENCES event_info(event_id) NOT NULL,
+  giftee INTEGER REFERENCES user(user_id)
 )
