@@ -11,4 +11,4 @@ def test_index(client, auth):
     auth.login()
     response = client.get("/")
     print(response.data)
-    assert b"Log Out" in response.data
+    assert b"Log out" in response.data

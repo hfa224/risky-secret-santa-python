@@ -1,6 +1,7 @@
 """
 Contains db functionality
 """
+
 import sqlite3
 import click
 from flask import current_app, g
@@ -19,13 +20,15 @@ def init_db_command():
 
 
 @click.command("add-event")
-@click.option('--draw_date', prompt='Enter draw date dd-mm-yyyy')
-@click.option('--event_date', prompt='Enter event date dd-mm-yyyy')
-@click.option('--event_description', prompt='Event description')
-@click.option('--cost', prompt='Maximum spend')
-def add_event_command(draw_date, event_date, event_description, cost):
+@click.option("--event_title", prompt="Enter event title")
+@click.option("--draw_date", prompt="Enter draw date yyyy-mm-dd")
+@click.option("--event_date", prompt="Enter event date yyyy-mm-dd")
+@click.option("--event_description", prompt="Event description")
+@click.option("--cost", prompt="Maximum spend")
+def add_event_command(event_title, draw_date, event_date, event_description, cost):
     """Command line method to add an event to the database"""
-    add_event(draw_date, event_date, event_description, cost)
+    add_event(event_title, draw_date, event_date, event_description, cost)
+
 
 def init_app(app):
     """
@@ -57,7 +60,7 @@ def init_db():
         db.executescript(f.read().decode("utf8"))
 
 
-def add_event(draw_date, event_date, event_description, cost):
+def add_event(event_title, draw_date, event_date, event_description, cost):
     """
     Initialises the db using the schema file. Will
     clear the existing data and create new tables.
@@ -65,10 +68,12 @@ def add_event(draw_date, event_date, event_description, cost):
     db = get_db()
 
     db.execute(
-        "INSERT INTO event (draw_date, event_date, event_description, cost) VALUES (?, ?, ?, ?)",
-        (draw_date, event_date, event_description, cost),
+        "INSERT INTO event (event_title, draw_date, event_date, ",
+        "event_description, cost) VALUES (?, ?, ?, ?, ?)",
+        (event_title, draw_date, event_date, event_description, cost),
     )
     db.commit()
+
 
 def get_db():
     """

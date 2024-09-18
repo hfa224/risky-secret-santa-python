@@ -4,26 +4,31 @@
 <section>
   <!-- if we have an event, display the event info -->
   {% if event %}
-  <table>
-    <tbody>
-      <tr>
-        <td>Event draw date</td>
-        <td>{{ event['draw_date'] }}</td>
-      </tr>
-      <tr>
-        <td>Event exchange date</td>
-        <td>{{event['event_date']}}</td>
-      </tr>
-      <tr>
-        <td>event_description</td>
-        <td>{{event['event_description']}}</td>
-      </tr>
-      <tr>
-        <td>cost</td>
-        <td>{{event['cost'] }}</td>
-      </tr>
-    </tbody>
-  </table>
+  <div class="base-grid">
+    <div class="row-style first-row-element" style="padding:10px">
+      <div class="material-symbols-outlined">
+        featured_seasonal_and_gifts
+      </div>The gift exchange is on {{ event['event_date']}}
+    </div>
+
+    <div class="row-style second-row-element-1" style="padding:10px"><span class="material-symbols-outlined">
+        sentiment_calm
+      </span>Which is x days away</div>
+    <div class="row-style second-row-element-2" style="padding:10px"><span class="material-symbols-outlined">
+        savings
+      </span> Maximum spend: {{ event['cost']}}</div>
+    <div class="row-style third-row-element" style="padding:10px">
+      <details>
+        <summary>Click here to see your assigned santee</summary>
+        It's
+        <sparkle>Helen</sparkle>
+      </details>
+    </div>
+  </div>
+</section>
+<hr>
+<section>
+  <p>I need <a href="">help!</a> | I'd like to <a href="">leave</a> the draw...
 </section>
 {% endif %}
 {% endblock %}
