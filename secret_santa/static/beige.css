@@ -23,6 +23,12 @@ body {
   font-style: normal;
 }
 
+.acme-regular {
+  font-family: "Ame", system-ui;
+  font-weight: 400;
+  font-style: normal;
+}
+
 .material-symbols-outlined {
   font-variation-settings:
   'FILL' 0,
@@ -106,7 +112,7 @@ textarea {
 h1 {
   font-size: 2.2em;
   margin-top: 0;
-  font-family: "Yuji Mai";
+  font-family: "Shrikhand";
 }
 
 h1,

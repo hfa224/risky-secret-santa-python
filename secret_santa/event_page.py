@@ -25,11 +25,19 @@ def index():
     event = get_current_event()
 
     # check if current user has joined this event and pass info to template
-    event_attendance = get_user_event_attendance(g.user["user_id"], event["event_id"])
+    if event is not None:
+        event_attendance = get_user_event_attendance(g.user["user_id"], event["event_id"])
+        res = get_db().execute(
+        "SELECT event_id, user_id FROM event_attendance"
+        )
+        event_attendance_list =  res.fetchall()
+    else:
+        event_attendance = None
+        event_attendance_list = []
 
-    print(event_attendance)
 
-    return render_template("event_page/index.html", event=event, event_attendance=event_attendance)
+    return render_template("event_page/index.html", event=event, event_attendance=event_attendance,
+                           attendance_list=event_attendance_list)
 
 
 @bp.route("/<int:event_id>/join", methods=("POST",))
@@ -43,7 +51,7 @@ def join(event_id):
 
     if get_user_event_attendance(current_user_id, event_id) is None:
         db.execute(
-            "INSERT INTO event_attendence (user_id, event_id, giftee) VALUES (?, ?, ?)",
+            "INSERT INTO event_attendance (user_id, event_id, giftee) VALUES (?, ?, ?)",
             (current_user_id, event_id, None),
         )
         db.commit()
