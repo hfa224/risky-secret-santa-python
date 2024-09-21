@@ -56,8 +56,7 @@ def join(event_id):
         )
         db.commit()
     else:
-        print("You have already joined this event!")
-        
+        print("You have already joined this event!")     
     return redirect(url_for("event_page.index"))
 
 @bp.route("/<int:event_id>/leave", methods=("POST",))

@@ -7,9 +7,8 @@ import pytest
 from secret_santa import create_app
 from secret_santa.db import get_db, init_db
 
-with open(os.path.join(os.path.dirname(__file__), "data.sql"), "rb") as f:
-    _data_sql = f.read().decode("utf8")
-
+with open(os.path.join(os.path.dirname(__file__), "user_data.sql"), "rb") as f:
+    _user_data_sql = f.read().decode("utf8")
 
 @pytest.fixture(name="app")
 def fixture_app():
@@ -25,7 +24,7 @@ def fixture_app():
 
     with app.app_context():
         init_db()
-        get_db().executescript(_data_sql)
+        get_db().executescript(_user_data_sql)
 
     yield app
 
