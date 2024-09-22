@@ -56,7 +56,7 @@ def join(event_id):
         )
         db.commit()
     else:
-        print("You have already joined this event!")     
+        print("You have already joined this event!")
     return redirect(url_for("event_page.index"))
 
 @bp.route("/<int:event_id>/leave", methods=("POST",))
@@ -67,7 +67,8 @@ def leave(event_id):
     """
     current_user_id = g.user["user_id"]
     db = get_db()
-    db.execute("DELETE FROM event_attendance WHERE user_id = ? AND event_id = ?", (current_user_id, event_id))
+    db.execute("DELETE FROM event_attendance WHERE user_id = ? AND event_id = ?",
+               (current_user_id, event_id))
     db.commit()
     return redirect(url_for("event_page.index"))
 

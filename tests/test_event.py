@@ -52,7 +52,7 @@ def test_join_leave(client, auth, app):
         print(response.data)
         assert b"Leave" in response.data
 
-        # TODO: check the user can't join twice # [fixme]
+        # in future check the user can't join twice
         # response = client.post("/event/2/join", follow_redirects=True)
         # assert response.request.path == "/event/"
 
