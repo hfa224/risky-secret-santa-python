@@ -7,7 +7,8 @@ from flask import (
     redirect,
     render_template,
     request,
-    url_for
+    url_for,
+    g
 )
 
 from secret_santa.auth import login_required
@@ -22,7 +23,54 @@ def index():
     This is the view that displays the current event info
     """
     event = get_current_event()
-    return render_template("event_page/index.html", event=event)
+
+    # check if current user has joined this event and pass info to template
+    if event is not None:
+        event_attendance = get_user_event_attendance(g.user["user_id"], event["event_id"])
+        res = get_db().execute(
+        "SELECT event_id, user_id FROM event_attendance"
+        )
+        event_attendance_list =  res.fetchall()
+    else:
+        event_attendance = None
+        event_attendance_list = []
+
+
+    return render_template("event_page/index.html", event=event, event_attendance=event_attendance,
+                           attendance_list=event_attendance_list)
+
+
+@bp.route("/<int:event_id>/join", methods=("POST",))
+@login_required
+def join(event_id):
+    """
+    Creates an event_attendance event
+    """
+    current_user_id = g.user["user_id"]
+    db = get_db()
+
+    if get_user_event_attendance(current_user_id, event_id) is None:
+        db.execute(
+            "INSERT INTO event_attendance (user_id, event_id, giftee) VALUES (?, ?, ?)",
+            (current_user_id, event_id, None),
+        )
+        db.commit()
+    else:
+        print("You have already joined this event!")
+    return redirect(url_for("event_page.index"))
+
+@bp.route("/<int:event_id>/leave", methods=("POST",))
+@login_required
+def leave(event_id):
+    """
+    Deletes the event attendance event for the current user
+    """
+    current_user_id = g.user["user_id"]
+    db = get_db()
+    db.execute("DELETE FROM event_attendance WHERE user_id = ? AND event_id = ?",
+               (current_user_id, event_id))
+    db.commit()
+    return redirect(url_for("event_page.index"))
 
 
 @bp.route("/<int:event_id>/update", methods=("GET", "POST"))
@@ -67,6 +115,18 @@ def delete(event_id):
     db.execute("DELETE FROM event WHERE event_id = ?", (event_id,))
     db.commit()
     return redirect(url_for("event"))
+
+
+def get_user_event_attendance(user_id, event_id):
+    """
+    Returns the event attendance event for the given user and event
+    """
+    res = get_db().execute(
+        "SELECT event_id, user_id FROM event_attendance "
+        "WHERE event_id = ? AND user_id = ?",
+        (event_id,user_id),
+    )
+    return res.fetchone()
 
 
 def get_current_event():

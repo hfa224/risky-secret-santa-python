@@ -29,6 +29,11 @@ def add_event_command(event_title, draw_date, event_date, event_description, cos
     """Command line method to add an event to the database"""
     add_event(event_title, draw_date, event_date, event_description, cost)
 
+@click.command("add-test-event")
+def add_test_event_command():
+    """Command line method to add an event to the database"""
+    add_event("test-event", "2024-09-30", "2024-10-01", "my test event", "ten ppunds")
+
 
 def init_app(app):
     """
@@ -46,6 +51,8 @@ def init_app(app):
     app.cli.add_command(init_db_command)
 
     app.cli.add_command(add_event_command)
+
+    app.cli.add_command(add_test_event_command)
 
 
 def init_db():
@@ -68,7 +75,7 @@ def add_event(event_title, draw_date, event_date, event_description, cost):
     db = get_db()
 
     db.execute(
-        "INSERT INTO event (event_title, draw_date, event_date, ",
+        "INSERT INTO event (event_title, draw_date, event_date, " +
         "event_description, cost) VALUES (?, ?, ?, ?, ?)",
         (event_title, draw_date, event_date, event_description, cost),
     )
