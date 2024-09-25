@@ -32,14 +32,23 @@
   <!-- Here, we need to check - if user has joined, display leave button, if not, display join button-->
   {% if event_attendance %}
   <form action="{{ url_for('event_page.leave', event_id=event['event_id']) }}" method="post">
-    <input class="info" type="submit" value="Leave"
-      onclick="return confirm('Click to leave the event.');">
+    <input class="info" type="submit" value="Leave" onclick="return confirm('Click to leave the event.');">
   </form>
   {% else %}
   <form action="{{ url_for('event_page.join', event_id=event['event_id']) }}" method="post">
-    <input class="info" type="submit" value="Join"
-      onclick="return confirm('Click to join the event.');">
+    <input class="info" type="submit" value="Join" onclick="return confirm('Click to join the event.');">
   </form>
+  {% endif %}
+</section>
+<section>
+  <p>{{ g.user['user_id'] }} and {{ event }}<p>
+  <!-- Here, we need to check - if user has joined, display leave button, if not, display join button-->
+  {% if g.user and g.user['user_id'] == event['user_id'] %}
+  <form action="" method="post">
+    <input class="info" type="submit" value="Perform the draw" onclick="return confirm('Click to perform the draw.');">
+  </form>
+  {% else %}
+  <!-- display nothing-->
   {% endif %}
 </section>
 {% else %}

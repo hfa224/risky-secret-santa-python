@@ -75,7 +75,7 @@ def test_login(client, auth):
     ),
 )
 def test_login_validate_input(auth, username, password, message):
-    """Test login validates input ocrrectly"""
+    """Test login validates input correctly"""
     response = auth.login(username, password)
     assert message in response.data
 

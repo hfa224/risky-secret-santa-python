@@ -12,6 +12,7 @@ CREATE TABLE user (
 );
 
 CREATE TABLE event (
+  user_id INTEGER REFERENCES user(user_id) NOT NULL,
   event_id INTEGER PRIMARY KEY AUTOINCREMENT,
   event_title TEXT NOT NULL,
   draw_date DATE NOT NULL,
