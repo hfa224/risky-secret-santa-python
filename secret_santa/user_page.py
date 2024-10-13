@@ -2,20 +2,18 @@
 
 from flask import (
     Blueprint,
-    flash,
     g,
     redirect,
     render_template,
     request,
     url_for,
-    current_app,
+    flash
 )
 from werkzeug.exceptions import abort
-from flask_mail import Mail, Message
 
 from secret_santa.auth import login_required
 from secret_santa.db import get_db
-from secret_santa.emails import send_email
+from secret_santa.sendgrid_email import send_email
 
 
 bp = Blueprint("user_page", __name__, url_prefix="/user")
@@ -86,12 +84,7 @@ def send_info(user_id):
     email = user["email"]
     address = user["address"]
     dietary_info = user["dietary_info"]
-
-    mail = Mail(current_app)
-
-    recipient = email
-    msg = Message("Twilio SendGrid Test Email", recipients=[recipient])
-    msg.body = (
+    msg = (
         "Hello "
         + name
         + ", your address is "
@@ -100,15 +93,8 @@ def send_info(user_id):
         + dietary_info
         + "."
     )
-    # msg.html = (
-    #    "<h1>Twilio SendGrid Test Email</h1>"
-    #    "<p>Congratulations! You have sent a test email with "
-    #    "<b>Twilio SendGrid</b>!</p>"
-    # )
-    #mail.send(msg)
-    flash(f"A test message was sent to {recipient}.")
 
-    send_email(mail, email, msg)
+    send_email(email, msg)
 
     return render_template("user_page/index.html", user_info=user)
 

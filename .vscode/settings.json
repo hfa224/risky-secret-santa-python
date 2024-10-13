@@ -1,0 +1,6 @@
+{
+    "python.analysis.extraPaths": [
+        "${workspaceFolder}/secret_santa",
+        "C:\\Users\\Helen\\AppData\\Local\\pypoetry\\Cache\\virtualenvs\\secret-santa-wURMykmh-py3.11"
+    ]
+}
