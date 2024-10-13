@@ -1,0 +1,6 @@
+.env
+/instance/flaskr.sqlite
+.mypy_cache/
+.pytest_cache/
+secret_santa/__pycache__/
+tests/__pycache__/
