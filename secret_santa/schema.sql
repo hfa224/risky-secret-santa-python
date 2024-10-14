@@ -23,6 +23,6 @@ CREATE TABLE event (
 
 CREATE TABLE event_attendance (
   user_id INTEGER REFERENCES user(user_id) NOT NULL,
-  event_id INTEGER REFERENCES event_info(event_id) NOT NULL,
+  event_id INTEGER REFERENCES event(event_id) NOT NULL,
   giftee INTEGER REFERENCES user(user_id)
 )

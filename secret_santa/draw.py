@@ -16,7 +16,7 @@ def perform_draw(event_id):
     # get a list of the event attendance objects for the event
     res = db.execute(
         "SELECT event_id, user_id FROM event_attendance WHERE event_id = ?",
-        (event_id),
+        (event_id,),
     )
     event_attendance_list = res.fetchall()
 
@@ -27,12 +27,17 @@ def perform_draw(event_id):
     partners = deque(event_attendance_list)
     partners.rotate()
 
+    print(partners[1]["user_id"])
+    print(event_attendance_list[1]["user_id"])
+
     # update the database
-    for partner, event_attendance in partners, event_attendance_list:
+    for partner, event_attendance in zip(partners, event_attendance_list):
+        print(partner["user_id"])
+        print(event_attendance["user_id"])
         db.execute(
-            "UPDATE event_attendance SET giftee = ? ",
+            "UPDATE event_attendance SET giftee = ? " +
             " WHERE user_id = ?",
-            (partner["user_id"], event_attendance["user_id"]),
+            (partner["user_id"], event_attendance["user_id"],),
         )
         db.commit()
 

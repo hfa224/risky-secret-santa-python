@@ -117,9 +117,9 @@ def delete(event_id):
     return redirect(url_for("event"))
 
 
-@bp.route("/<int:event_id>/perform_draw", methods=("POST",))
+@bp.route("/<int:event_id>/perform_event_draw", methods=("POST",))
 @login_required
-def do_the_draw(event_id):
+def perform_event_draw(event_id):
     """
     Deletes the event
     """
