@@ -27,13 +27,8 @@ def perform_draw(event_id):
     partners = deque(event_attendance_list)
     partners.rotate()
 
-    print(partners[1]["user_id"])
-    print(event_attendance_list[1]["user_id"])
-
     # update the database
     for partner, event_attendance in zip(partners, event_attendance_list):
-        print(partner["user_id"])
-        print(event_attendance["user_id"])
         db.execute(
             "UPDATE event_attendance SET giftee = ? " +
             " WHERE user_id = ?",
