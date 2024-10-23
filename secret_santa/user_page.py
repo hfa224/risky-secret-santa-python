@@ -83,8 +83,8 @@ def send_info(user_id):
 
     name = user["username"]
     email = user["email"]
-    address = user["address"] if user["address"] != None else "None"
-    dietary_info = user["dietary_info"] if user["dietary_info"] != None else "None"
+    address = user["address"] if user["address"] is not None else "None"
+    dietary_info = user["dietary_info"] if user["dietary_info"] is not None else "None"
     msg = (
         "Hello "
         + name
