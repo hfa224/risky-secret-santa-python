@@ -23,11 +23,11 @@
       </tr>
       <tr>
         <td>Address</td>
-        <td>{{user_info['address']}}</td>
+        <td>{{user_info['address'] or None}}</td>
       </tr>
       <tr>
         <td>Dietary info</td>
-        <td>{{user_info['dietary_info'] }}</td>
+        <td>{{user_info['dietary_info'] or None}}</td>
       </tr>
     </tbody>
   </table>

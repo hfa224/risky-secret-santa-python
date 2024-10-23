@@ -41,6 +41,7 @@ def update(user_id):
     user = get_user(user_id)
 
     if request.method == "POST":
+        email = request.form['email']
         address = request.form["address"]
         dietary_info = request.form["dietary_info"]
         error = None
@@ -50,8 +51,8 @@ def update(user_id):
         else:
             db = get_db()
             db.execute(
-                "UPDATE user SET address = ?, dietary_info = ? WHERE user_id = ?",
-                (address, dietary_info, user_id),
+                "UPDATE user SET email = ?, address = ?, dietary_info = ? WHERE user_id = ?",
+                (email, address, dietary_info, user_id),
             )
             db.commit()
             return redirect(url_for("user_page.index"))
@@ -82,8 +83,8 @@ def send_info(user_id):
 
     name = user["username"]
     email = user["email"]
-    address = user["address"]
-    dietary_info = user["dietary_info"]
+    address = user["address"] if user["address"] != None else "None"
+    dietary_info = user["dietary_info"] if user["dietary_info"] != None else "None"
     msg = (
         "Hello "
         + name
