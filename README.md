@@ -4,13 +4,13 @@ First start the poetry shell:
 
 poetry shell
 
-And install dependencies
+And if running the first time, install dependencies
 
-poetry install (why is this necessary?)
+poetry install 
 
 Then use
 
-flask --app secret_santa run --debug
+flask --app secret_santa run (--debug)
 
 # Database
 

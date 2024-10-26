@@ -6,6 +6,9 @@
 
 {% block content %}
   <form method="post">
+    <label for="title">Email</label>
+    <input name="email" id="email"
+      value="{{ request.form['email'] or user['email'] }}" required>
     <label for="title">Address</label>
     <input name="address" id="address"
       value="{{ request.form['address'] or user['address'] }}" required>
