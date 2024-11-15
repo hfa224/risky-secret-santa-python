@@ -1,14 +1,6 @@
 """This page serves up the user page endpoints"""
 
-from flask import (
-    Blueprint,
-    g,
-    redirect,
-    render_template,
-    request,
-    url_for,
-    flash
-)
+from flask import Blueprint, g, redirect, render_template, request, url_for, flash
 from werkzeug.exceptions import abort
 
 from secret_santa.auth import login_required

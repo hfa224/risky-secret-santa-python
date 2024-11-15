@@ -1,10 +1,12 @@
-""" Test the index/event page """
+"""Test the index/event page"""
 
 import os
 
 from secret_santa.db import get_db
 
-with open(os.path.join(os.path.dirname(__file__), "test_data/event_data.sql"), "rb") as f:
+with open(
+    os.path.join(os.path.dirname(__file__), "test_data/event_data.sql"), "rb"
+) as f:
     _event_data_sql = f.read().decode("utf8")
 
 

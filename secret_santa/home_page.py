@@ -1,10 +1,6 @@
 """This page serves up the main page endpoints"""
 
-from flask import (
-    Blueprint,
-    g,
-    render_template
-)
+from flask import Blueprint, g, render_template
 
 from secret_santa.user_page import get_user
 

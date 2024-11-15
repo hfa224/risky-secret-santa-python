@@ -30,9 +30,11 @@ def perform_draw(event_id):
     # update the database
     for partner, event_attendance in zip(partners, event_attendance_list):
         db.execute(
-            "UPDATE event_attendance SET giftee = ? " +
-            " WHERE user_id = ?",
-            (partner["user_id"], event_attendance["user_id"],),
+            "UPDATE event_attendance SET giftee = ? " + " WHERE user_id = ?",
+            (
+                partner["user_id"],
+                event_attendance["user_id"],
+            ),
         )
         db.commit()
 

@@ -5,6 +5,7 @@ from flask_mail import Message, Mail
 
 mail = Mail(current_app)
 
+
 def send_email(recipient_email, msg):
     """
     Method that sends an email using flask_mail to recipient email

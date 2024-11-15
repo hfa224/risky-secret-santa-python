@@ -1,9 +1,10 @@
 """
 Method for sending email via sendgrid API
 """
+
 import os
-import sendgrid # type: ignore
-from sendgrid.helpers.mail import Email, To, Content, Mail # type: ignore
+import sendgrid  # type: ignore
+from sendgrid.helpers.mail import Email, To, Content, Mail  # type: ignore
 from flask import flash
 
 MAIL_DEFAULT_SENDER = os.environ.get("MAIL_DEFAULT_SENDER")

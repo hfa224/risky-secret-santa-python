@@ -1,4 +1,4 @@
-""" Test auth functions """
+"""Test auth functions"""
 
 import pytest
 from flask import g, session

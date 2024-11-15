@@ -1,4 +1,4 @@
-""" Test db """
+"""Test db"""
 
 import sqlite3
 

@@ -1,4 +1,4 @@
-""" Test the index/event page """
+"""Test the index/event page"""
 
 import os
 
@@ -32,5 +32,5 @@ def test_draw(app):
         event_attendance_list = res.fetchall()
         for event_attendance in event_attendance_list:
             print(event_attendance.keys())
-            assert event_attendance['giftee'] is not None
-            assert event_attendance['giftee'] != event_attendance['user_id']
+            assert event_attendance["giftee"] is not None
+            assert event_attendance["giftee"] != event_attendance["user_id"]

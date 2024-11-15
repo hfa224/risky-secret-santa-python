@@ -1,4 +1,4 @@
-""" Test factory create_app method """
+"""Test factory create_app method"""
 
 from secret_santa import create_app
 

@@ -1,10 +1,10 @@
 """This module creates and runs a secret santa app"""
+
 import os
 from flask import Flask
 from . import db
 from . import auth
 from . import user_page
-from . import admin_page
 from . import home_page
 from . import event_page
 
@@ -52,7 +52,6 @@ def create_app(test_config=None):
 
     app.register_blueprint(auth.bp)
     app.register_blueprint(user_page.bp)
-    app.register_blueprint(admin_page.bp)
     app.register_blueprint(home_page.bp)
     app.register_blueprint(event_page.bp)
 
