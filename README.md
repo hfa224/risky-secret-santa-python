@@ -4,23 +4,26 @@ First start the poetry shell:
 
 poetry shell
 
-And install dependencies
+When running for the first time, install dependencies
 
-poetry install (why is this necessary?)
+poetry install
 
-Then use
+Then use the following command to run the app (debug arg optional)
 
 flask --app secret_santa run --debug
 
-# Database
+# Initialising the database
 
-Use:
+Before initialising the database, check the set up values in the instance/user-config.ini file. You must update
+the admin email and password to your own values first.
+
+The following command initialises the database and adds an admin user and an event using the values in the user-cofig.ini file:
 
 flask --app secret_santa init-db
 
-To intialise the database. This will clear any existing tables and add new ones
+This will also clear any existing tables and add new ones, so will delete any exisisting data.
 
-# To run tests
+# Testing
 
 To run the tests, run:
 
