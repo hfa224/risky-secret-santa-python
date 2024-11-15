@@ -19,7 +19,7 @@ def test_get_close_db(app):
     assert "closed" in str(e.value)
 
 
-def test_init_db_command(runner, monkeypatch):
+def test_init_db_command(app, runner, monkeypatch):
     """Test init_db command"""
 
     @dataclass
@@ -27,19 +27,13 @@ def test_init_db_command(runner, monkeypatch):
         """Recorder class"""
 
         called_init_db = False
-        called_init_user = False
 
     def fake_init_db():
         """fake init db method"""
         Recorder.called_init_db = True
 
-    def fake_add_initial_user():
-        """fake add intial user method"""
-        Recorder.called_init_user = True
-
-    monkeypatch.setattr("secret_santa.db.init_db", fake_init_db)
-    monkeypatch.setattr("secret_santa.db.add_initial_user", fake_add_initial_user)
-    result = runner.invoke(args=["init-db"])
-    assert "Initialized" in result.output
-    assert Recorder.called_init_db
-    assert Recorder.called_init_user
+    with app.app_context():
+        monkeypatch.setattr("secret_santa.db.init_db", fake_init_db)
+        result = runner.invoke(args=["init-db"])
+        assert "My Secret Santa Event" in result.output
+        assert Recorder.called_init_db
