@@ -3,9 +3,13 @@ Contains db functionality
 """
 
 import sqlite3
+import configparser
+import os
 import click
 from flask import current_app, g
 from werkzeug.security import generate_password_hash
+
+configParser = configparser.RawConfigParser()
 
 
 @click.command("init-db")
@@ -17,7 +21,27 @@ def init_db_command():
 
     # Clear the existing data and create new tables.
     init_db()
-    add_initial_user()
+    #add_initial_user()
+    # read event details and initial user details from config file
+    # this initialises the app with the event
+    # this can be edited after by the admin user
+    with current_app.app_context():
+        config_file_path = os.path.join(current_app.instance_path, "user-config.txt")
+        configParser.read(config_file_path)
+        print(configParser.get('event.details', 'EVENT_TITLE'))
+
+        # get the admin user details and add the admin user
+        email = configParser.get('admin.user', 'EMAIL')
+        password = configParser.get('admin.user', 'PASSWORD')
+        add_user("admin", email, password)
+
+        # get the event details and add to database
+        event_title = configParser.get('event.details', 'EVENT_TITLE')
+        draw_date = configParser.get('event.details', 'DRAW_DATE')
+        event_date = configParser.get('event.details', 'EVENT_DATE')
+        event_description = configParser.get('event.details', 'EVENT_TITLE')
+        cost = configParser.get('event.details', 'EVENT_TITLE')
+        add_event(1, event_title, draw_date, event_date, event_description, cost)
     click.echo("Initialized the database.")
 
 
@@ -40,12 +64,12 @@ def add_test_event_command():
 
 
 @click.command("add-initial-user")
-@click.option("--user_name", prompt="Enter user name")
+@click.option("--username", prompt="Enter user name")
 @click.option("--email", prompt="Enter email")
 @click.option("--password", prompt="Enter password")
-def add_user_command(user_name, email, password):
+def add_user_command(username, email, password):
     """Add an initial user to serve as the event handler"""
-    add_user(user_name, email, password)
+    add_user(username, email, password)
 
 
 def init_app(app):
@@ -106,7 +130,7 @@ def add_event(user_id, event_title, draw_date, event_date, event_description, co
     db.commit()
 
 
-def add_user(user_name, email, password):
+def add_user(username, email, password):
     """
     Initialises the db using the schema file. Will
     clear the existing data and create new tables.
@@ -114,8 +138,8 @@ def add_user(user_name, email, password):
     db = get_db()
 
     db.execute(
-        "INSERT INTO user (username, email, password, VALUES (?, ?, ?)",
-        (user_name, email, generate_password_hash(password)),
+        "INSERT INTO user (username, password, email) VALUES (?, ?, ?)",
+        (username, generate_password_hash(password), email),
     )
     db.commit()
 
