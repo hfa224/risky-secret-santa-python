@@ -1,20 +1,14 @@
 # pylint: disable=duplicate-code
 """This page serves up the event page endpoints"""
 
-from flask import (
-    Blueprint,
-    flash,
-    redirect,
-    render_template,
-    request,
-    url_for,
-    g
-)
+from flask import Blueprint, flash, redirect, render_template, request, url_for, g
 
 from secret_santa.auth import login_required
 from secret_santa.db import get_db
+from secret_santa.draw import perform_draw
 
 bp = Blueprint("event_page", __name__, url_prefix="/event")
+
 
 @bp.route("/")
 @login_required
@@ -26,18 +20,21 @@ def index():
 
     # check if current user has joined this event and pass info to template
     if event is not None:
-        event_attendance = get_user_event_attendance(g.user["user_id"], event["event_id"])
-        res = get_db().execute(
-        "SELECT event_id, user_id FROM event_attendance"
+        event_attendance = get_user_event_attendance(
+            g.user["user_id"], event["event_id"]
         )
-        event_attendance_list =  res.fetchall()
+        res = get_db().execute("SELECT event_id, user_id, giftee FROM event_attendance")
+        event_attendance_list = res.fetchall()
     else:
         event_attendance = None
         event_attendance_list = []
 
-
-    return render_template("event_page/index.html", event=event, event_attendance=event_attendance,
-                           attendance_list=event_attendance_list)
+    return render_template(
+        "event_page/index.html",
+        event=event,
+        event_attendance=event_attendance,
+        attendance_list=event_attendance_list,
+    )
 
 
 @bp.route("/<int:event_id>/join", methods=("POST",))
@@ -59,6 +56,7 @@ def join(event_id):
         print("You have already joined this event!")
     return redirect(url_for("event_page.index"))
 
+
 @bp.route("/<int:event_id>/leave", methods=("POST",))
 @login_required
 def leave(event_id):
@@ -67,8 +65,10 @@ def leave(event_id):
     """
     current_user_id = g.user["user_id"]
     db = get_db()
-    db.execute("DELETE FROM event_attendance WHERE user_id = ? AND event_id = ?",
-               (current_user_id, event_id))
+    db.execute(
+        "DELETE FROM event_attendance WHERE user_id = ? AND event_id = ?",
+        (current_user_id, event_id),
+    )
     db.commit()
     return redirect(url_for("event_page.index"))
 
@@ -117,14 +117,24 @@ def delete(event_id):
     return redirect(url_for("event"))
 
 
+@bp.route("/<int:event_id>/perform_event_draw", methods=("POST",))
+@login_required
+def perform_event_draw(event_id):
+    """
+    Deletes the event
+    """
+    perform_draw(event_id)
+    return redirect(url_for("event_page.index"))
+
+
 def get_user_event_attendance(user_id, event_id):
     """
     Returns the event attendance event for the given user and event
     """
     res = get_db().execute(
-        "SELECT event_id, user_id FROM event_attendance "
+        "SELECT event_id, user_id, giftee FROM event_attendance "
         "WHERE event_id = ? AND user_id = ?",
-        (event_id,user_id),
+        (event_id, user_id),
     )
     return res.fetchone()
 
@@ -134,7 +144,7 @@ def get_current_event():
     Get the current event info, or return None
     """
     res = get_db().execute(
-        "SELECT event_id, event_date, draw_date, event_description, "
+        "SELECT user_id, event_id, event_date, draw_date, event_description, "
         "cost FROM event ORDER BY event_date DESC"
     )
     event = res.fetchone()

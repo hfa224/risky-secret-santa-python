@@ -1,4 +1,4 @@
-""" Test the index/home page """
+"""Test the index/home page"""
 
 
 def test_index(client, auth):

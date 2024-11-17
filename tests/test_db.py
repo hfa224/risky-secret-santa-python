@@ -1,4 +1,4 @@
-""" Test db """
+"""Test db"""
 
 import sqlite3
 
@@ -19,20 +19,21 @@ def test_get_close_db(app):
     assert "closed" in str(e.value)
 
 
-def test_init_db_command(runner, monkeypatch):
+def test_init_db_command(app, runner, monkeypatch):
     """Test init_db command"""
 
     @dataclass
     class Recorder:
         """Recorder class"""
 
-        called = False
+        called_init_db = False
 
     def fake_init_db():
-        """return fake db"""
-        Recorder.called = True
+        """fake init db method"""
+        Recorder.called_init_db = True
 
-    monkeypatch.setattr("secret_santa.db.init_db", fake_init_db)
-    result = runner.invoke(args=["init-db"])
-    assert "Initialized" in result.output
-    assert Recorder.called
+    with app.app_context():
+        monkeypatch.setattr("secret_santa.db.init_db", fake_init_db)
+        result = runner.invoke(args=["init-db"])
+        assert "My Secret Santa Event" in result.output
+        assert Recorder.called_init_db
