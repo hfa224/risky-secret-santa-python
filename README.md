@@ -10,7 +10,7 @@ poetry install
 
 Then use the following command to run the app (debug arg optional)
 
-flask --app secret_santa run --debug
+flask --app secret_santa run (--debug)
 
 # Initialising the database
 
