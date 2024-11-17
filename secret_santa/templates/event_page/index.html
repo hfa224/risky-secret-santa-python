@@ -18,13 +18,17 @@
         savings
       </span> Maximum spend: {{ event['cost']}}</div>
     <!-- Here, we need to check - if user has joined, and the draw has happened-->
+    {% if event_attendance and event_attendance['giftee'] %}
     <div class="row-style third-row-element" style="padding:10px">
       <details>
         <summary>Click here to see your assigned santee</summary>
         It's
-        <sparkle>Helen</sparkle>
+        <sparkle>{{ event_attendance['giftee']}}</sparkle>
       </details>
     </div>
+    {% else %}
+    <div>{{ event_attendance['giftee']}}</div>
+    {% endif %}
   </div>
 </section>
 <hr>

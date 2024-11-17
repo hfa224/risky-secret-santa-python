@@ -41,7 +41,7 @@ def init_db_command():
     click.echo("Initialized the database.")
 
 
-@click.command("add-initial-user")
+@click.command("add-user")
 @click.option("--username", prompt="Enter user name")
 @click.option("--email", prompt="Enter email")
 @click.option("--password", prompt="Enter password")
@@ -64,6 +64,7 @@ def init_app(app):
 
     # Add the defined cli command to the flask app
     app.cli.add_command(init_db_command)
+    app.cli.add_command(add_user_command)
 
 
 def init_db():

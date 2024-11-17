@@ -23,7 +23,7 @@ def index():
         event_attendance = get_user_event_attendance(
             g.user["user_id"], event["event_id"]
         )
-        res = get_db().execute("SELECT event_id, user_id FROM event_attendance")
+        res = get_db().execute("SELECT event_id, user_id, giftee FROM event_attendance")
         event_attendance_list = res.fetchall()
     else:
         event_attendance = None
@@ -124,7 +124,7 @@ def perform_event_draw(event_id):
     Deletes the event
     """
     perform_draw(event_id)
-    return redirect(url_for("event"))
+    return redirect(url_for("event_page.index"))
 
 
 def get_user_event_attendance(user_id, event_id):
@@ -132,7 +132,7 @@ def get_user_event_attendance(user_id, event_id):
     Returns the event attendance event for the given user and event
     """
     res = get_db().execute(
-        "SELECT event_id, user_id FROM event_attendance "
+        "SELECT event_id, user_id, giftee FROM event_attendance "
         "WHERE event_id = ? AND user_id = ?",
         (event_id, user_id),
     )
