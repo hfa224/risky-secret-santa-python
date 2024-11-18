@@ -5,10 +5,10 @@ import os
 from secret_santa.db import get_db
 from secret_santa.draw import perform_draw
 
-# with open(
-#     os.path.join(os.path.dirname(__file__), "test_data/user_data.sql"), "rb"
-# ) as f:
-#     _user_data_sql = f.read().decode("utf8")
+with open(
+    os.path.join(os.path.dirname(__file__), "test_data/event_attendance.sql"), "rb"
+) as f:
+    _user_data_sql = f.read().decode("utf8")
 
 
 def test_draw(app):
@@ -19,7 +19,7 @@ def test_draw(app):
 
     # Add all the event, user and event_attendance indo
     with app.app_context():
-        #get_db().executescript(_user_data_sql)
+        get_db().executescript(_user_data_sql)
 
         # perform draw for event id
         perform_draw()
