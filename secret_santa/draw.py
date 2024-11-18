@@ -5,7 +5,7 @@ from collections import deque
 from secret_santa.db import get_db
 
 
-def perform_draw(event_id):
+def perform_draw():
     """
     Method that performs the secret santa draw and updates the event attendance entry
     with the user's draw santee
@@ -15,22 +15,22 @@ def perform_draw(event_id):
 
     # get a list of the event attendance objects for the event
     res = db.execute(
-        "SELECT event_id, user_id FROM event_attendance WHERE event_id = ?",
-        (event_id,),
+        "SELECT user_id, username FROM user WHERE has_joined_event = ?",
+        (True,),
     )
-    event_attendance_list = res.fetchall()
+    joined_user_list = res.fetchall()
 
     # assign user ids to other user ids
     # Given a list of people, assign each one a secret santa partner
     # then update the "giftee" field in the database
-    random.shuffle(event_attendance_list)
-    partners = deque(event_attendance_list)
+    random.shuffle(joined_user_list)
+    partners = deque(joined_user_list)
     partners.rotate()
 
     # update the database
-    for partner, event_attendance in zip(partners, event_attendance_list):
+    for partner, joined_user in zip(partners, joined_user_list):
         print(partner["user_id"])
-        print(event_attendance["user_id"])
+        print(joined_user["user_id"])
 
         res = db.execute(
             "SELECT user_id, username FROM user WHERE user_id = ?",
@@ -38,10 +38,10 @@ def perform_draw(event_id):
         )
 
         db.execute(
-            "UPDATE event_attendance SET giftee = ? " + " WHERE user_id = ?",
+            "UPDATE user SET giftee = ? " + " WHERE user_id = ?",
             (
                 res.fetchall()[0]["username"],
-                event_attendance["user_id"],
+                joined_user["user_id"],
             ),
         )
         db.commit()

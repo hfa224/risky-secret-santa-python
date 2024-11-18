@@ -9,12 +9,3 @@ INSERT INTO event (event_id, user_id, event_title, draw_date, event_date, event_
 VALUES
   (1, 1, 'test title', '2018-01-01', '2018-01-01', 'my event description', 'ten english pounds'),
   (2, 1, 'test title 2024', '2024-01-01', '2024-01-01', 'the recent event', 'twenty english pounds');
-
-INSERT INTO event_attendance (user_id,event_id)
-VALUES
-  (1, 1),
-  (2, 1),
-  (4, 1),
-  (6, 1),
-  (7, 1),
-  (3, 1);

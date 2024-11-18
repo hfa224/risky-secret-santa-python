@@ -1,6 +1,5 @@
 DROP TABLE IF EXISTS user;
 DROP TABLE IF EXISTS event;
-DROP TABLE IF EXISTS event_attendance;
 
 CREATE TABLE user (
   user_id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -8,7 +7,9 @@ CREATE TABLE user (
   email TEXT UNIQUE NOT NULL,
   address TEXT,
   dietary_info TEXT DEFAULT "None",
-  password TEXT NOT NULL
+  password TEXT NOT NULL,
+  giftee INTEGER REFERENCES user(user_id),
+  has_joined_event BOOLEAN  DEFAULT FALSE NOT NULL
 );
 
 CREATE TABLE event (
@@ -20,9 +21,3 @@ CREATE TABLE event (
   event_description MEDIUMTEXT NOT NULL,
   cost TEXT NOT NULL
 );
-
-CREATE TABLE event_attendance (
-  user_id INTEGER REFERENCES user(user_id) NOT NULL,
-  event_id INTEGER REFERENCES event(event_id) NOT NULL,
-  giftee INTEGER REFERENCES user(user_id)
-)
