@@ -17,8 +17,6 @@ def index():
     This is the view that displays the current event info
     """
     event = get_current_event()
-
-    # TODO: if admin pass through the whole list of users
     return render_template("event_page/index.html", event=event, user=g.user)
 
 
