@@ -47,7 +47,7 @@ def test_join_leave(client, auth, app):
 
         # use follow_redirects=True to test the redirect endpoint
         # the current event has id 2
-        response = client.post("/event/2/join", follow_redirects=True)
+        response = client.post("/event/join", follow_redirects=True)
         assert response.request.path == "/event/"
 
         response = client.get("/event/")
@@ -60,7 +60,7 @@ def test_join_leave(client, auth, app):
 
         # use follow_redirects=True to test the redirect endpoint
         # the current event has id 2
-        response = client.post("/event/2/leave", follow_redirects=True)
+        response = client.post("/event/leave", follow_redirects=True)
         assert response.request.path == "/event/"
 
         response = client.get("/event/")

@@ -8,29 +8,30 @@ from secret_santa.draw import perform_draw
 with open(
     os.path.join(os.path.dirname(__file__), "test_data/event_attendance.sql"), "rb"
 ) as f:
-    _event_data_sql = f.read().decode("utf8")
+    _user_data_sql = f.read().decode("utf8")
 
 
 def test_draw(app):
-    """Test that the event page displays the current event for a logged in user"""
+    """Test that the draw function correctly assigns giftees to users"""
 
     # First log in
     # auth.login()
 
     # Add all the event, user and event_attendance indo
     with app.app_context():
-        get_db().executescript(_event_data_sql)
+        get_db().executescript(_user_data_sql)
 
         # perform draw for event id
-        perform_draw(1)
+        perform_draw()
 
         # check in the database that everyone has a sensible giftee
         res = get_db().execute(
-            "SELECT event_id, user_id, giftee FROM event_attendance WHERE event_id = ?",
-            (1,),
+            "SELECT user_id, username, giftee FROM user WHERE has_joined_event = ?",
+            (True,),
         )
-        event_attendance_list = res.fetchall()
-        for event_attendance in event_attendance_list:
-            print(event_attendance.keys())
-            assert event_attendance["giftee"] is not None
-            assert event_attendance["giftee"] != event_attendance["user_id"]
+        user_list = res.fetchall()
+        assert len(user_list) != 0
+        for user in user_list:
+            print(user.keys())
+            assert user["giftee"] is not None
+            assert user["giftee"] != user["user_id"]

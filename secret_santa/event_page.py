@@ -17,39 +17,25 @@ def index():
     This is the view that displays the current event info
     """
     event = get_current_event()
-
-    # check if current user has joined this event and pass info to template
-    if event is not None:
-        event_attendance = get_user_event_attendance(
-            g.user["user_id"], event["event_id"]
-        )
-        res = get_db().execute("SELECT event_id, user_id, giftee FROM event_attendance")
-        event_attendance_list = res.fetchall()
-    else:
-        event_attendance = None
-        event_attendance_list = []
-
-    return render_template(
-        "event_page/index.html",
-        event=event,
-        event_attendance=event_attendance,
-        attendance_list=event_attendance_list,
-    )
+    return render_template("event_page/index.html", event=event, user=g.user)
 
 
-@bp.route("/<int:event_id>/join", methods=("POST",))
+@bp.route("/join", methods=("POST",))
 @login_required
-def join(event_id):
+def join():
     """
-    Creates an event_attendance event
+    Updates the user to indicate they've joined
     """
     current_user_id = g.user["user_id"]
     db = get_db()
 
-    if get_user_event_attendance(current_user_id, event_id) is None:
+    if not g.user["has_joined_event"]:
         db.execute(
-            "INSERT INTO event_attendance (user_id, event_id, giftee) VALUES (?, ?, ?)",
-            (current_user_id, event_id, None),
+            "UPDATE user SET has_joined_event = ? " + " WHERE user_id = ?",
+            (
+                True,
+                current_user_id,
+            ),
         )
         db.commit()
     else:
@@ -57,29 +43,36 @@ def join(event_id):
     return redirect(url_for("event_page.index"))
 
 
-@bp.route("/<int:event_id>/leave", methods=("POST",))
+@bp.route("/leave", methods=("POST",))
 @login_required
-def leave(event_id):
+def leave():
     """
-    Deletes the event attendance event for the current user
+    Updates user to set has_joined_event to False
     """
     current_user_id = g.user["user_id"]
     db = get_db()
-    db.execute(
-        "DELETE FROM event_attendance WHERE user_id = ? AND event_id = ?",
-        (current_user_id, event_id),
-    )
-    db.commit()
+
+    if g.user["has_joined_event"]:
+        db.execute(
+            "UPDATE user SET has_joined_event = ? " + " WHERE user_id = ?",
+            (
+                False,
+                current_user_id,
+            ),
+        )
+        db.commit()
+    else:
+        print("You have already left this event!")
     return redirect(url_for("event_page.index"))
 
 
-@bp.route("/<int:event_id>/update", methods=("GET", "POST"))
+@bp.route("/update", methods=("GET", "POST"))
 @login_required
-def update(event_id):
+def update():
     """
     This is the view where the event can be updated
     """
-    event = get_event(event_id)
+    event = get_current_event()
 
     if request.method == "POST":
         event_date = request.form["event_date"]
@@ -96,7 +89,7 @@ def update(event_id):
                 "UPDATE event SET event_date = ?, draw_date = ?, ",
                 "event_description = ?, cost = ?",
                 " WHERE event_id = ?",
-                (event_date, draw_date, event_description, cost, event_id),
+                (event_date, draw_date, event_description, cost, event["event_id"]),
             )
             db.commit()
             return redirect(url_for("event_page.index"))
@@ -110,33 +103,20 @@ def delete(event_id):
     """
     Deletes the event
     """
-    get_event(event_id)
     db = get_db()
     db.execute("DELETE FROM event WHERE event_id = ?", (event_id,))
     db.commit()
     return redirect(url_for("event"))
 
 
-@bp.route("/<int:event_id>/perform_event_draw", methods=("POST",))
+@bp.route("/perform_event_draw", methods=("POST",))
 @login_required
-def perform_event_draw(event_id):
+def perform_event_draw():
     """
-    Deletes the event
+    Performs the draw for the event
     """
-    perform_draw(event_id)
+    perform_draw()
     return redirect(url_for("event_page.index"))
-
-
-def get_user_event_attendance(user_id, event_id):
-    """
-    Returns the event attendance event for the given user and event
-    """
-    res = get_db().execute(
-        "SELECT event_id, user_id, giftee FROM event_attendance "
-        "WHERE event_id = ? AND user_id = ?",
-        (event_id, user_id),
-    )
-    return res.fetchone()
 
 
 def get_current_event():
@@ -146,21 +126,6 @@ def get_current_event():
     res = get_db().execute(
         "SELECT user_id, event_id, event_date, draw_date, event_description, "
         "cost FROM event ORDER BY event_date DESC"
-    )
-    event = res.fetchone()
-
-    return event
-
-
-def get_event(event_id):
-    """
-    Get the event with the given id, or return none
-    """
-
-    res = get_db().execute(
-        "SELECT event_id, event_date, draw_date, event_description, cost FROM event "
-        "WHERE event_id = ?",
-        (event_id,),
     )
     event = res.fetchone()
 

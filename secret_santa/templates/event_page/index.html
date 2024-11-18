@@ -18,28 +18,28 @@
         savings
       </span> Maximum spend: {{ event['cost']}}</div>
     <!-- Here, we need to check - if user has joined, and the draw has happened-->
-    {% if event_attendance and event_attendance['giftee'] %}
+    {% if user and user['giftee'] %}
     <div class="row-style third-row-element" style="padding:10px">
       <details>
         <summary>Click here to see your assigned santee</summary>
         It's
-        <sparkle>{{ event_attendance['giftee']}}</sparkle>
+        <sparkle>{{ user['giftee']}}</sparkle>
       </details>
     </div>
     {% else %}
-    <div>{{ event_attendance['giftee']}}</div>
+    <div>{{ user['giftee']}}</div>
     {% endif %}
   </div>
 </section>
 <hr>
 <section>
   <!-- Here, we need to check - if user has joined, display leave button, if not, display join button-->
-  {% if event_attendance %}
-  <form action="{{ url_for('event_page.leave', event_id=event['event_id']) }}" method="post">
+  {% if user['has_joined_event'] %}
+  <form action="{{ url_for('event_page.leave') }}" method="post">
     <input class="info" type="submit" value="Leave" onclick="return confirm('Click to leave the event.');">
   </form>
   {% else %}
-  <form action="{{ url_for('event_page.join', event_id=event['event_id']) }}" method="post">
+  <form action="{{ url_for('event_page.join') }}" method="post">
     <input class="info" type="submit" value="Join" onclick="return confirm('Click to join the event.');">
   </form>
   {% endif %}
@@ -48,7 +48,7 @@
   <!--p>{{ g.user['user_id'] }} and {{ event }}<p -->
   <!-- Here, we need to check - if user is the event owner, show the perform draw button-->
   {% if g.user and g.user['user_id'] == event['user_id'] %}
-  <form action="{{ url_for('event_page.perform_event_draw', event_id=event['event_id']) }}" method="post">
+  <form action="{{ url_for('event_page.perform_event_draw') }}" method="post">
     <input class="info" type="submit" value="Perform the draw" onclick="return confirm('Click to perform the draw.');">
   </form>
   {% else %}
